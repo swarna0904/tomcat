@@ -1,0 +1,27 @@
+pool:
+  name: Azure Pipelines
+steps:
+- task: Docker@0
+  displayName: 'Build an image'
+  inputs:
+    azureSubscription: 'Subscription-GBSHCWBPOC-MPN-EA-Dev-Test (a7ef2611-0ce1-43d1-9f78-390bb8841639)'
+    azureContainerRegistry: '{"loginServer":"hcwtestregistry01.azurecr.io", "id" : "/subscriptions/a7ef2611-0ce1-43d1-9f78-390bb8841639/resourceGroups/RG-HCWTEST01/providers/Microsoft.ContainerRegistry/registries/hcwtestregistry01"}'
+    imageName: 'tomcatsample-aks'
+
+- task: Docker@0
+  displayName: 'Push an image'
+  inputs:
+    azureSubscription: 'Subscription-GBSHCWBPOC-MPN-EA-Dev-Test (a7ef2611-0ce1-43d1-9f78-390bb8841639)'
+    azureContainerRegistry: '{"loginServer":"hcwtestregistry01.azurecr.io", "id" : "/subscriptions/a7ef2611-0ce1-43d1-9f78-390bb8841639/resourceGroups/RG-HCWTEST01/providers/Microsoft.ContainerRegistry/registries/hcwtestregistry01"}'
+    action: 'Push an image'
+    imageName: 'tomcatsample-aks'
+
+- task: CopyFiles@2
+  displayName: 'Copy Files to: $(Build.ArtifactStagingDirectory)'
+  inputs:
+    SourceFolder: ./templates/
+    TargetFolder: '$(Build.ArtifactStagingDirectory)'
+
+- task: PublishBuildArtifacts@1
+  displayName: 'Publish Artifact: drop'
+
